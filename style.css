@@ -38,3 +38,33 @@ button {
   background-color: #4caf50;
   color: white;
 }
+
+/* Only show pointer on playable cells */
+.cell {
+  cursor: default;
+}
+
+.cell.playable {
+  cursor: pointer;
+}
+
+/* Subtle hover highlight */
+.cell.playable:hover {
+  background-color: #ddd;
+}
+
+/* Preview mark (faint X or O) */
+.cell.playable::after {
+  content: attr(data-preview);
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 2.5rem;
+}
+
+/* Disable hover effects after game ends */
+.board.disabled .cell {
+  cursor: not-allowed;
+}
+
+.board.disabled .cell:hover {
+  background-color: #f2f2f2;
+}

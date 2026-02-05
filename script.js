@@ -1,6 +1,7 @@
 const cells = document.querySelectorAll(".cell");
 const statusText = document.getElementById("status");
 const restartBtn = document.getElementById("restart");
+const boardElement = document.getElementById("board");
 
 let currentPlayer = "X";
 let board = ["", "", "", "", "", "", "", "", ""];
@@ -17,6 +18,18 @@ const winningCombos = [
   [2, 4, 6],
 ];
 
+function updatePlayableCells() {
+  cells.forEach((cell, index) => {
+    if (board[index] === "" && gameActive) {
+      cell.classList.add("playable");
+      cell.dataset.preview = currentPlayer;
+    } else {
+      cell.classList.remove("playable");
+      cell.dataset.preview = "";
+    }
+  });
+}
+
 function handleCellClick(e) {
   const index = e.target.dataset.index;
 
@@ -26,6 +39,7 @@ function handleCellClick(e) {
   e.target.textContent = currentPlayer;
 
   checkResult();
+  updatePlayableCells();
 }
 
 function checkResult() {
@@ -40,6 +54,8 @@ function checkResult() {
 
       statusText.textContent = `Player ${currentPlayer} wins!`;
       gameActive = false;
+      boardElement.classList.add("disabled");
+      updatePlayableCells();
       return;
     }
   }
@@ -48,6 +64,8 @@ function checkResult() {
   if (!board.includes("")) {
     statusText.textContent = "It's a draw!";
     gameActive = false;
+    boardElement.classList.add("disabled");
+    updatePlayableCells();
     return;
   }
 
@@ -66,7 +84,10 @@ function restartGame() {
     cell.textContent = "";
     cell.classList.remove("win"); // 👈 clear highlights
   });
+  boardElement.classList.remove("disabled");
+  updatePlayableCells();
 }
 
 cells.forEach((cell) => cell.addEventListener("click", handleCellClick));
 restartBtn.addEventListener("click", restartGame);
+updatePlayableCells();

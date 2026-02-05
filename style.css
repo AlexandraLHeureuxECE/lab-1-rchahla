@@ -32,3 +32,9 @@ button {
   font-size: 16px;
   cursor: pointer;
 }
+
+/* Highlight winning cells */
+.cell.win {
+  background-color: #4caf50;
+  color: white;
+}

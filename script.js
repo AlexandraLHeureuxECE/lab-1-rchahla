@@ -29,28 +29,29 @@ function handleCellClick(e) {
 }
 
 function checkResult() {
-  let roundWon = false;
-
   for (let combo of winningCombos) {
     const [a, b, c] = combo;
+
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      roundWon = true;
-      break;
+      // Highlight winning cells
+      cells[a].classList.add("win");
+      cells[b].classList.add("win");
+      cells[c].classList.add("win");
+
+      statusText.textContent = `Player ${currentPlayer} wins!`;
+      gameActive = false;
+      return;
     }
   }
 
-  if (roundWon) {
-    statusText.textContent = `Player ${currentPlayer} wins!`;
-    gameActive = false;
-    return;
-  }
-
+  // Draw check
   if (!board.includes("")) {
     statusText.textContent = "It's a draw!";
     gameActive = false;
     return;
   }
 
+  // Switch player
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   statusText.textContent = `Player ${currentPlayer}'s turn`;
 }
@@ -61,7 +62,10 @@ function restartGame() {
   currentPlayer = "X";
   statusText.textContent = "Player X's turn";
 
-  cells.forEach((cell) => (cell.textContent = ""));
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("win"); // 👈 clear highlights
+  });
 }
 
 cells.forEach((cell) => cell.addEventListener("click", handleCellClick));
